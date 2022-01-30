@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { gql } from 'graphql-tag'
+// import { gql } from 'graphql-tag'
 
 export default {
   data() {
@@ -14,19 +14,19 @@ export default {
       posts: null,
     }
   },
-  apollo: {
-    users: gql`
-      query {
-        posts {
-          id
-          title
-          content
-          createdAt
-          userId
-        }
-      }
-    `,
-  },
+  // apollo: {
+  //   users: gql`
+  //     query {
+  //       posts {
+  //         id
+  //         title
+  //         content
+  //         createdAt
+  //         userId
+  //       }
+  //     }
+  //   `,
+  // },
 }
 </script>
 

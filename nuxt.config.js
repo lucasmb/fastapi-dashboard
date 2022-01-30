@@ -1,4 +1,6 @@
-export default {
+import { defineNuxtConfig } from '@nuxt/bridge'
+
+export default defineNuxtConfig({
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -20,13 +22,13 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
-  apollo: {
-    clientConfigs: {
-      default: {
-        httpEndpoint: 'http://localhost:8000/graphql',
-      },
-    },
-  },
+  // apollo: {
+  //   clientConfigs: {
+  //     default: {
+  //       httpEndpoint: 'http://localhost:8000/graphql',
+  //     },
+  //   },
+  // },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['~/assets/css/main.scss'],
 
@@ -43,8 +45,45 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/apollo', '@nuxtjs/axios'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/auth-next'],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
-}
+
+  router: {
+    middleware: ['auth'],
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'access_token',
+          // global: true,
+          required: true,
+          type: 'Bearer',
+        },
+        user: {
+          property: false,
+          // autoFetch: true
+        },
+        endpoints: {
+          login: {
+            url: 'http://localhost:8000/auth/login',
+            method: 'post',
+            // headers: {
+            //   'Content-Type': 'application/x-www-form-urlencoded',
+            // },
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest2',
+              // 'content-type': 'application/json',
+              // 'content-type': 'application/x-www-form-urlencoded',
+            },
+          },
+          logout: { url: '/api/auth/logout', method: 'post' },
+          user: { url: 'http://localhost:8000/users/me', method: 'get' },
+        },
+      },
+    },
+  },
+})
